@@ -1,6 +1,6 @@
-# Progressive web app - 101
+# Progressive web app - 201
 
-This is an intro project for progressive web apps that pass 100% in Google Lighthouse checks
+This is a progressive web app project that takes advantage of caching json, the "message" event and push notifications.
 
 ## Make it run
 
