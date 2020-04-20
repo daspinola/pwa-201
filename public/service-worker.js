@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sw-cache-example';
+const CACHE_NAME = 'sw-cache-example'
 const toCache = [
   '/',
   '/index.html',
@@ -7,7 +7,7 @@ const toCache = [
   '/js/status.js',
   '/images/apple-touch.png',
   '/images/splash-screen.png',
-];
+]
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
@@ -20,15 +20,31 @@ self.addEventListener('install', function(event) {
 })
 
 self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    fetch(event.request)
-      .catch(() => {
-        return caches.open(CACHE_NAME)
-          .then((cache) => {
-            return cache.match(event.request)
-          })
-      })
-  )
+  event.respondWith(async function() {
+    const cache = await caches.open(CACHE_NAME)
+    const cacheMatch = await cache.match(event.request)
+
+    if (navigator.onLine) {
+      const request = fetch(event.request)
+
+      event.waitUntil(async function() {
+        const response = await request
+        await cache.put(event.request, await response.clone())
+      }())
+
+      return cacheMatch || request
+    }
+
+    return cacheMatch
+  }())
+})
+
+self.addEventListener('message', function(event) {
+  console.log('Message received from client ->', event.data)
+
+  self.clients.matchAll().then(clients => {
+    clients.forEach(client => client.postMessage('Hello from SW!'));
+  })
 })
 
 self.addEventListener('activate', function(event) {
