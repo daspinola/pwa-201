@@ -6,7 +6,7 @@ This is a progressive web app project that takes advantage of caching json, the 
 
 - Clone the repository
 - In the terminal install the dependencies with `npm install`
-- Run `npm run start-debug`
+- Run `npm run server-debug`
 
 If you need to generate the certs you can use:
 
